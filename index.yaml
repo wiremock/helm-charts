@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  wiremock:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2020-04-23T11:50:15.239963099+10:00
+    description: A Helm chart for Kubernetes
+    digest: b73c677b70dda7b05f0de76ea6f850628ccdfc22377717445a03ff601d30dfd2
+    name: wiremock
+    urls:
+    - https://gitkent.github.io/helm-charts/wiremock-0.1.0.tgz
+    version: 0.1.0
+generated: 2020-04-23T11:50:15.237191999+10:00
