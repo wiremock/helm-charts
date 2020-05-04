@@ -1,5 +1,5 @@
-# wiremock-helm
-Helm Chart for deployment Wiremock to Kubernetes
+# helm-charts
+Helm Chart for deployment to Kubernetes.
 
 # Quick Start
 ## Pre-requisites
@@ -7,20 +7,5 @@ Helm Chart for deployment Wiremock to Kubernetes
 2. [Install helm](https://helm.sh/docs/intro/install/)
 3. Deploy Wiremock
     ```bash
-    helm upgrade --install wiremock ./chart/wiremock
+    helm upgrade --install <release_name> ./chart/<chart_name>
     ```
-4. Verify Wiremock deployment
-    ```bash
-    $ export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "wiremock.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-
-    $ kubectl port-forward $POD_NAME 8080:{{ .Values.service.internalPort}}
-    ```
-    Visit http://127.0.0.1:8080/__admin/webapp on your browser.
-5. Verifying a response using Wiremock, run
-    ```
-    $ curl -X POST http://127.0.0.1:8080/v1/hello
-    ```
-
-# References:
-* https://github.com/holomekc/wiremock
-* https://github.com/tomakehurst/wiremock
