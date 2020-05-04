@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kube-resource-report.fullname" . }}
+  labels:
+    {{- include "kube-resource-report.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "kube-resource-report.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kube-resource-report.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "kube-resource-report.serviceAccountName" . }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        # environment variables
+        {{- if .Values.env }}
+        env:
+        {{- end }}
+        {{- range $key, $value := .Values.env }}
+        - name: {{ $key }}
+          value: {{ tpl $value $ | quote }}
+        {{- end }}
+        args:
+        - --update-interval-minutes={{ .Values.updateInterval }}
+        {{- if .Values.addtionalCostPerCluster }}
+        - --additional-cost-per-cluster={{ .Values.addtionalCostPerCluster }}
+        {{- end }}
+        {{- if .Values.customLinks.enabled }}
+        - "--links-file=/kube_resource_report/config/links.yaml"
+        {{- end }}
+        {{- if .Values.pricing.enabled }}
+        - "--pricing-file=/kube_resource_report/config/pricing.csv"
+        {{- end }}
+        {{- range .Values.customArgs }}
+        - {{ . | quote }}
+        {{- end }}
+        - /output
+        volumeMounts:
+        - mountPath: /output
+          name: report-data
+        {{- if or .Values.pricing.enabled .Values.customLinks.enabled }}
+        - mountPath: /kube_resource_report/config/
+          name: configs
+        {{- end }}
+        resources:
+          {{- toYaml .Values.resourcesApp | nindent 10 }}
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+      - name: nginx
+        image: nginx:alpine
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          name: nginx-config
+          readOnly: true
+          subPath: nginx.conf
+        - mountPath: /etc/nginx/conf.d/default.conf
+          name: nginx-config
+          readOnly: true
+          subPath: default.conf
+        - mountPath: /tmp
+          name: nginx-tmp
+        - mountPath: /usr/share/nginx/html
+          name: report-data
+          readOnly: true
+        ports:
+        - name: {{ .Values.container.portName }}
+          containerPort: {{ .Values.container.port }}
+          protocol: {{ .Values.container.portProtocol }}
+        readinessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.container.port }}
+        resources:
+          {{- toYaml .Values.resourcesNginx | nindent 10 }}
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: {{ .Release.Name }}-nginx
+        - name: nginx-tmp
+          emptyDir: {}
+        - name: report-data
+          emptyDir:
+            sizeLimit: 500Mi
+        {{- if or .Values.customLinks.enabled .Values.pricing.enabled }}
+        - name: configs
+          configMap:
+            name: {{ .Release.Name }}-configs
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
