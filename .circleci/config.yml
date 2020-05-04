@@ -12,6 +12,11 @@ jobs:
           command: |
             helm version --client
             helm lint charts/*
+      - run:
+          name: render
+          command: |
+            helm version --client
+            helm template charts/*
 workflows:
   version: 2
   lint:

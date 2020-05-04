@@ -1,0 +1,106 @@
+# Default values for kube-resource-report.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: hjacobs/kube-resource-report
+  tag: "20.4.3"
+  pullPolicy: IfNotPresent
+
+rbac:
+  create: true
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Update interval in minutes
+updateInterval: 1
+
+# custom args like --system-namespaces
+# e.g.
+# customArgs:
+#   - "--system-namespaces=kube-system,infra-system"
+customArgs: []
+
+# Custom links
+# Ref: https://github.com/hjacobs/kube-resource-report#custom-links
+customLinks:
+  enabled: false
+  data: |
+    team:
+    - href: "https://people.mycorp.example.org/search?q=team:{id}"
+      title: "Search team {id} on people.mycorp"
+      icon: search
+
+# x additional USD/month cluster costs (like ELB, CloudWatch, etc.)
+addtionalCostPerCluster: 0
+
+pricing:
+  enabled: false
+  # CSV with columns region,instance-type,monthly-price-usd
+  # region is defined via the node label "failure-domain.beta.kubernetes.io/region"
+  # instance-type is defined via the node label "beta.kubernetes.io/instance-type"
+  data: |
+    dc-1,master,30.000
+    dc-1,worker,500.000
+
+service:
+  type: ClusterIP
+  port: 8080
+  portName: http
+
+container:
+  port: 8080
+  portName: http
+  portProtocol: TCP
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resourcesApp:
+  limits:
+    memory: 100Mi
+  requests:
+    cpu: 5m
+    memory: 50Mi
+
+resourcesNginx:
+  limits:
+    memory: 50Mi
+  requests:
+    cpu: 5m
+    memory: 20Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# e.g.
+# env:
+#   NODE_LABEL_SPOT: "a.com/spot"
+#   OBJECT_LABEL_APPLICATION: "app,chart"
+env: {}
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
