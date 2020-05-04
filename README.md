@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/gitkent/helm-charts.svg?style=svg)](https://circleci.com/gh/gitkent/helm-charts)
+
 # helm-charts
 Helm Chart for deployment to Kubernetes.
 
