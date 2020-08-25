@@ -1,5 +1,6 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "wiremock.fullname" . -}}
+{{- $fullName := .Values.service.name -}}
+{{- $servicePort := .Values.service.externalPort -}}
 {{- $ingressPath := .Values.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -33,6 +34,6 @@ spec:
           - path: {{ $ingressPath }}
             backend:
               serviceName: {{ $fullName }}
-              servicePort: http
+              servicePort: {{ $servicePort }}
   {{- end }}
 {{- end }}

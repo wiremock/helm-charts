@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: holomekc/wiremock-gui
-  tag: latest
+  tag: 2.26.3
   pullPolicy: IfNotPresent
 
 nameOverride: ""
