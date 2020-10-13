@@ -47,10 +47,27 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           volumeMounts:
-          - mountPath: /home/wiremock/storage/mappings
-            name: mappings-volume
-          - mountPath: /home/wiremock/storage/__files
-            name: responses-volume
+          - mountPath: /home/wiremock/storage
+            name: mappings-data
+          - mountPath: /home/wiremock/storage
+            name: responses-data
+      initContainers:
+      - name: copy-mappings
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command: ["bash", "-c", "cp  -rf /data/mappings /home/wiremock/storage/mappings"]
+        volumeMounts:
+        - mountPath: /data/mappings
+          name: mappings-volume
+        - mountPath: /home/wiremock/storage/mappings
+          name: mappings-data
+      - name: copy-responses
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command: ["bash", "-c", "cp  -rf /data/responses /home/wiremock/storage/__files"]
+        volumeMounts:
+        - mountPath: /data/responses
+          name: responses-volume
+        - mountPath: /home/wiremock/storage/__files
+          name: responses-data    
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
@@ -64,6 +81,10 @@ spec:
 {{ toYaml . | indent 8 }}
     {{- end }}
       volumes:
+        - name: mappings-data
+          emptyDir: {}
+        - name: responses-data
+          emptyDir: {}
         - name: mappings-volume
           configMap:
             name: {{ include "wiremock.fullname" . }}-mappings-configs
