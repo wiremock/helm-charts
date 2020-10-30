@@ -7,7 +7,7 @@ Helm Chart for deployment Wiremock to Kubernetes
 2. [Install helm](https://helm.sh/docs/intro/install/)
 3. Deploy Wiremock
     ```bash
-    helm upgrade --install wiremock ./chart/wiremock
+    helm upgrade --install wiremock ./charts/wiremock
     ```
 4. Verify Wiremock deployment
     ```bash
