@@ -47,9 +47,9 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           volumeMounts:
-          - mountPath: /home/wiremock/storage
+          - mountPath: /home/wiremock/storage/mappings
             name: mappings-data
-          - mountPath: /home/wiremock/storage
+          - mountPath: /home/wiremock/storage/__files
             name: responses-data
       initContainers:
       - name: copy-mappings
