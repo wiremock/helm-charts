@@ -10,6 +10,9 @@ jobs:
           name: pre-req
           command: |
             apk add --update openssh-client git
+      - add_ssh_keys:
+          fingerprints:
+            - "59:d2:07:b9:36:1e:96:62:3b:f9:85:e7:85:b5:6b:6a"
       - checkout
       - run:
           name: lint
