@@ -6,11 +6,11 @@ jobs:
     docker:
       - image: docker.io/alpine/helm:latest
     steps:
-      - checkout
       - run:
           name: pre-req
           command: |
             apk add --update openssh-client git
+      - checkout
       - run:
           name: lint
           command: |
