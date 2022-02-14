@@ -8,6 +8,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: pre-req
+          command: |
+            apk add --update openssh-client git
+      - run:
           name: lint
           command: |
             helm version --client
