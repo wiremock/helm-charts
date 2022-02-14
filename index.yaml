@@ -13,6 +13,16 @@ entries:
   - apiVersion: v1
     appVersion: 2.26.3
     created: "2022-02-14T16:07:36.01192+11:00"
+    created: "2020-10-30T12:47:12.077065+11:00"
+    description: A Helm chart for Wiremock deployment on Kubernetes
+    digest: b2af1fa27466f3911eca2b7223d89c147853f54acb84c5cdd236a85fd3a696a5
+    name: wiremock
+    urls:
+    - https://gitkent.github.io/helm-charts/wiremock-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v1
+    appVersion: 2.26.3
+    created: "2020-10-30T12:47:12.07642+11:00"
     description: A Helm chart for Wiremock deployment on Kubernetes
     digest: b168baf9814cd2f2589dbba78bf0e66d21a1c81cd497dca6bedf26aefadd81d4
     name: wiremock
@@ -22,6 +32,7 @@ entries:
   - apiVersion: v1
     appVersion: "1.0"
     created: "2022-02-14T16:07:36.011427+11:00"
+    created: "2020-10-30T12:47:12.075232+11:00"
     description: A Helm chart for Wiremock deployment on Kubernetes
     digest: 5a489e52a09536aac1d89a29ced5e34bee95b9992e200c0c47085f6b76ba74fe
     name: wiremock
@@ -29,3 +40,4 @@ entries:
     - https://gitkent.github.io/helm-charts/wiremock-0.1.0.tgz
     version: 0.1.0
 generated: "2022-02-14T16:07:36.010867+11:00"
+generated: "2020-10-30T12:47:12.060636+11:00"
