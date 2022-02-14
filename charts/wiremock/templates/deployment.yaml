@@ -53,7 +53,8 @@ spec:
             name: responses-data
       initContainers:
       - name: copy-mappings
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
+        imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
         command: ["bash", "-c", "cp  -rf /data/mappings /home/wiremock/storage/mappings"]
         volumeMounts:
         - mountPath: /data/mappings
@@ -61,7 +62,8 @@ spec:
         - mountPath: /home/wiremock/storage/mappings
           name: mappings-data
       - name: copy-responses
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
+        imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
         command: ["bash", "-c", "cp  -rf /data/responses /home/wiremock/storage/__files"]
         volumeMounts:
         - mountPath: /data/responses
