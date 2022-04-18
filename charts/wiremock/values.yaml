@@ -56,3 +56,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+scheme: "HTTP"
