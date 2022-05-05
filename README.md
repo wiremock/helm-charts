@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/gitkent/helm-charts.svg?style=svg)](https://circleci.com/gh/gitkent/helm-charts)
+![CI](https://github.com/gitkent/helm-charts/actions/workflows/ci.yaml/badge.svg)
 
 # helm-charts
 Helm Chart for deployment to Kubernetes.
