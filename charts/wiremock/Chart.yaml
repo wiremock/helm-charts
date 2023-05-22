@@ -3,3 +3,8 @@ appVersion: "2.32.0.2"
 description: A Helm chart for WireMock deployment on Kubernetes
 name: wiremock
 version: 0.1.4
+maintainers:
+  - name: "kent.io"
+    url: "https://github.com/gitkent"
+  - name: "Oleg Nenashev"
+    url: "https://github.com/oleg-nenashev"
