@@ -8,3 +8,16 @@ maintainers:
     url: "https://github.com/gitkent"
   - name: "Oleg Nenashev"
     url: "https://github.com/oleg-nenashev"
+icon: "https://wiremock.org/images/logos/wiremock/logo_square.svg"
+home: "https://wiremock.org"
+sources:
+  - "https://github.com/wiremock/helm-charts"
+  - "https://github.com/wiremock/wiremock-docker"
+  - "https://github.com/wiremock/wiremock"  
+keywords:
+  - wiremock
+  - api
+  - openapi
+  - api-testing
+  - rest-api
+  - api-mocking
