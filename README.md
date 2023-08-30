@@ -3,9 +3,11 @@
 # WireMock Helm Charts
 
 Helm Chart for WireMock deployment to Kubernetes.
-It allows deploying the official [WireMock Docker images](https://github.com/wiremock/wiremock-docker)
-and also other charts that extend it,
-in particular [holomekc/wiremock](https://github.com/holomekc/wiremock) with embedded UI.
+It allows deploying the official [WireMock Docker images](https://github.com/wiremock/wiremock-docker) for both WireMock 2 and WireMock 3,
+and also other charts that extend it.
+
+Historically, [holomekc/wiremock](https://github.com/holomekc/wiremock) was suggested as a default image,
+and the chart remains partially compatible with it.
 
 # Quick Start
 
@@ -28,9 +30,9 @@ $ export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "ap
 $ kubectl port-forward $POD_NAME 8080:{{ .Values.service.internalPort}}
 ```
 
-## Verify Wiremock deployment
+## Verify WireMock deployment
 
-To verify erifying a response using Wiremock, run
+To verify a response using WireMock, run
 
 ```bash
 $ curl -X POST http://127.0.0.1:8080/v1/hello
@@ -38,9 +40,8 @@ $ curl -X POST http://127.0.0.1:8080/v1/hello
 
 To check the web app when using `holomekc/wiremock`, visit http://127.0.0.1:8080/__admin/webapp on your browser.
     
-# References:
+## References
 
 - [WireMock Java Library](https://github.com/tomakehurst/wiremock)
 - [Official WireMock Docker Image](https://github.com/wiremock/wiremock-docker)
 - [WireMock extended with Web UI](https://github.com/holomekc/wiremock), a project by [(@holomekc]https://github.com/holomekc)
-
