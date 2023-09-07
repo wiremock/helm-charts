@@ -9,9 +9,13 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
+  {{- if .Values.mappings }}
+  {{- toYaml .Values.mappings | nindent 2 }}
+  {{- else }}
   {{- $files := .Files }}
   {{- range $key, $value := .Files }}
   {{- if hasPrefix "mappings/" $key }} {{/* only when in mappings/ */}}
   {{ $key | trimPrefix "mappings/" }}: {{ $files.Get $key | quote }} {{/* adapt $key as desired */}}
+  {{- end }}
   {{- end }}
   {{- end }}
