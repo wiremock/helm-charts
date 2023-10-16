@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: wiremock/wiremock
-  tag: 3.0.0-1
+  tag: 3.2.0-2
   pullPolicy: IfNotPresent
 
 initContainer:
