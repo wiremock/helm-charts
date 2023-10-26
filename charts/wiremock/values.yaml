@@ -37,7 +37,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 env:
-  WIREMOCK_OPTIONS: "--port=9021,--max-request-journal=1000,--local-response-templating,--root-dir=/home/wiremock/storage"
+  WIREMOCK_OPTIONS: "--port=9021 --max-request-journal=1000 --local-response-templating --root-dir=/home/wiremock/storage"
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
