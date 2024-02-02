@@ -1,3 +1,3 @@
 #!/bin/bash -e
 helm package ./charts/*
-helm repo index --url https://gitkent.github.io/helm-charts/ .
+helm repo index --url https://wiremock.github.io/helm-charts/ .
