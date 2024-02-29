@@ -3,25 +3,27 @@ kind: Deployment
 metadata:
   name: {{ include "wiremock.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "wiremock.name" . }}
-    helm.sh/chart: {{ include "wiremock.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "wiremock.labels" . | nindent 4 }}
+
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "wiremock.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "wiremock.selectorLabels" . | nindent 6 }}
+
   template:
     metadata:
       annotations:
         checksum/configMappings: {{ include (print $.Template.BasePath "/configmap-mappings.yaml") . | sha256sum }}
         checksum/configResponses: {{ include (print $.Template.BasePath "/configmap-responses.yaml") . | sha256sum }}
       labels:
-        app.kubernetes.io/name: {{ include "wiremock.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "wiremock.selectorLabels" . | nindent 8 }}
+
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

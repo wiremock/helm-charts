@@ -9,6 +9,9 @@ image:
   tag: 2.32.0.2
   pullPolicy: IfNotPresent
 
+imagePullSecrets: []
+  # - name: secretName
+
 initContainer:
   image:
     repository: bash
@@ -19,19 +22,22 @@ nameOverride: ""
 fullnameOverride: ""
 
 service:
-  name: wiremock
   type: ClusterIP
   externalPort: 9021
   internalPort: 9021
 
 ingress:
   enabled: false
+  className: ""
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   path: /
   hosts:
-    - chart-example.local
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:

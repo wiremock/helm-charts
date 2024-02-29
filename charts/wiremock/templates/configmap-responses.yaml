@@ -4,10 +4,8 @@ metadata:
   name: {{ include "wiremock.fullname" . }}-responses-configs
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    app.kubernetes.io/name: {{ include "wiremock.name" . }}
-    helm.sh/chart: {{ include "wiremock.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "wiremock.labels" . | nindent 4 }}
+
 data:
   {{- $files := .Files }}
   {{- range $key, $value := .Files }}
