@@ -38,12 +38,12 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /__admin/webapp
+              path: /__admin/mappings
               port: {{ .Values.service.internalPort }}
               scheme: {{ .Values.scheme }}
           readinessProbe:
             httpGet:
-              path: /__admin/webapp
+              path: /__admin/mappings
               port: {{ .Values.service.internalPort }}
               scheme: {{ .Values.scheme }}
           resources:
