@@ -1,12 +1,12 @@
-# Default values for wiremock.
+# Default values for WireMock.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: holomekc/wiremock-gui
-  tag: 2.32.0.2
+  repository: wiremock/wiremock
+  tag: 3.2.0-3
   pullPolicy: IfNotPresent
 
 initContainer:
@@ -37,7 +37,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 env:
-  WIREMOCK_OPTIONS: "--port=9021,--max-request-journal=1000,--local-response-templating,--root-dir=/home/wiremock/storage"
+  WIREMOCK_OPTIONS: "--port=9021 --max-request-journal=1000 --local-response-templating --root-dir=/home/wiremock/storage"
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
