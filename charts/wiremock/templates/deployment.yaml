@@ -30,8 +30,8 @@ spec:
           env:
           {{- end }}
           {{- range $key, $value := .Values.env }}
-          - name: {{ $key }}
-            value: {{ tpl $value $ | quote }}
+            - name: {{ $key }}
+              value: {{ tpl $value $ | quote }}
           {{- end }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
@@ -49,46 +49,46 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           volumeMounts:
-          - mountPath: /home/wiremock/storage/mappings
-            name: mappings-data
-          - mountPath: /home/wiremock/storage/__files
-            name: responses-data
+            - mountPath: /home/wiremock/storage/mappings
+              name: mappings-data
+            - mountPath: /home/wiremock/storage/__files
+              name: responses-data
       initContainers:
-      - name: copy-mappings
-        image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
-        imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
-        command: ["bash", "-c", "cp  -rf /data/mappings /home/wiremock/storage/mappings"]
-        volumeMounts:
-        - mountPath: /data/mappings
-          name: mappings-volume
-        - mountPath: /home/wiremock/storage/mappings
-          name: mappings-data
-      - name: copy-responses
-        image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
-        imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
-        command: ["bash", "-c", "cp  -rf /data/responses /home/wiremock/storage/__files"]
-        volumeMounts:
-        - mountPath: /data/responses
-          name: responses-volume
-        - mountPath: /home/wiremock/storage/__files
-          name: responses-data    
+        - name: copy-mappings
+          image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
+          imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
+          command: [ "bash", "-c", "cp  -rf /data/mappings /home/wiremock/storage/mappings" ]
+          volumeMounts:
+            - mountPath: /data/mappings
+              name: mappings-volume
+            - mountPath: /home/wiremock/storage/mappings
+              name: mappings-data
+        - name: copy-responses
+          image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
+          imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
+          command: [ "bash", "-c", "cp  -rf /data/responses /home/wiremock/storage/__files" ]
+          volumeMounts:
+            - mountPath: /data/responses
+              name: responses-volume
+            - mountPath: /home/wiremock/storage/__files
+              name: responses-data
     {{- with .Values.nodeSelector }}
       nodeSelector:
-{{ toYaml . | indent 8 }}
+{{ tpl (toYaml .) $ | indent 8 }}
     {{- end }}
     {{- with .Values.affinity }}
       affinity:
-{{ toYaml . | indent 8 }}
+{{ tpl (toYaml .) $ | indent 8 }}
     {{- end }}
     {{- with .Values.tolerations }}
       tolerations:
-{{ toYaml . | indent 8 }}
+{{ tpl (toYaml .) $ | indent 8 }}
     {{- end }}
       volumes:
         - name: mappings-data
-          emptyDir: {}
+          emptyDir: { }
         - name: responses-data
-          emptyDir: {}
+          emptyDir: { }
         - name: mappings-volume
           configMap:
             name: {{ include "wiremock.fullname" . }}-mappings-configs
