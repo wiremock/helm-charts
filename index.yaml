@@ -6,6 +6,7 @@ entries:
     created: "2023-08-30T15:32:11.9806537+02:00"
     description: A Helm chart for WireMock deployment on Kubernetes
     digest: 23e14af94bbef9fce4a4456f93001ece953cc841a5d2b10dad3075a7a9ba1066
+    name: wiremock
     urls:
     - https://wiremock.github.io/helm-charts/wiremock-0.2.0.tgz
     version: 0.2.0
