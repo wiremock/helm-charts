@@ -30,7 +30,7 @@ $ kubectl port-forward $POD_NAME 8080:{{ .Values.service.internalPort}}
 
 ## Verify Wiremock deployment
 
-To verify erifying a response using Wiremock, run
+To verify a response using Wiremock, run
 
 ```bash
 $ curl -X POST http://127.0.0.1:8080/v1/hello
