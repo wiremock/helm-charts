@@ -25,12 +25,14 @@ Setup port forwarding
 ```bash
 $ export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "wiremock.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
 
-$ kubectl port-forward $POD_NAME 8080:{{ .Values.service.internalPort}}
+$ export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+
+$ kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
 ```
 
 ## Verify Wiremock deployment
 
-To verify erifying a response using Wiremock, run
+To verify a response using Wiremock, run
 
 ```bash
 $ curl -X POST http://127.0.0.1:8080/v1/hello

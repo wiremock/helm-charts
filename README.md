@@ -18,6 +18,16 @@ and the chart remains partially compatible with it.
 
 ## Install WireMock
 
+Once Helm is installed, you can either add this repository with `helm repo add`:
+
+```bash
+helm repo add wiremock https://wiremock.github.io/helm-charts
+```
+
+You can then run `helm upgrade --install <release name> wiremock/wiremock` to install it through the repository.
+
+Alternatively, you can clone the helm repo and then install it with a local reference:
+
 ```bash
 helm upgrade --install <release_name> ./charts/<chart_name>
 ```

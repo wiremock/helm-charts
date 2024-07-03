@@ -3,17 +3,13 @@ kind: Service
 metadata:
   name: {{ include "wiremock.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "wiremock.name" . }}
-    helm.sh/chart: {{ include "wiremock.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "wiremock.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.externalPort }}
       targetPort: {{ .Values.service.internalPort }}
       protocol: TCP
-      name: {{ .Values.service.name }}
+      name: {{ include "wiremock.fullname" . }}
   selector:
-    app.kubernetes.io/name: {{ include "wiremock.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "wiremock.selectorLabels" . | nindent 4 }}
