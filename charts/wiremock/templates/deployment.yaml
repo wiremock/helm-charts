@@ -74,6 +74,8 @@ spec:
             - mountPath: /home/wiremock/storage/mappings
               name: mappings-data
         - name: copy-responses
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
           imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
           command: ["bash", "-c", "cp  -rf /data/responses /home/wiremock/storage/__files"]
