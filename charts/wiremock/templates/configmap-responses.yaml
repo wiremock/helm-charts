@@ -11,3 +11,6 @@ data:
   {{ $key | trimPrefix "responses/" }}: {{ $files.Get $key | quote }} {{/* adapt $key as desired */}}
   {{- end }}
   {{- end }}
+  {{- with .Values.responses }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
