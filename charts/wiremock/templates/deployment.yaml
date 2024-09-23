@@ -46,12 +46,12 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /__admin/mappings
+              path: /__admin/health
               port: {{ .Values.service.internalPort }}
               scheme: {{ .Values.scheme }}
           readinessProbe:
             httpGet:
-              path: /__admin/mappings
+              path: /__admin/health
               port: {{ .Values.service.internalPort }}
               scheme: {{ .Values.scheme }}
           resources:
