@@ -11,3 +11,6 @@ data:
   {{ $key | trimPrefix "mappings/" }}: {{ $files.Get $key | quote }} {{/* adapt $key as desired */}}
   {{- end }}
   {{- end }}
+  {{- with .Values.mappings }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
