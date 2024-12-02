@@ -29,7 +29,7 @@ replicaCount: 1
 image:
   repository: wiremock/wiremock
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 3.8.0
+  tag: 3.10.0
   pullPolicy: IfNotPresent
 
 initContainer:
