@@ -54,4 +54,4 @@ To check the web app when using `holomekc/wiremock`, visit http://127.0.0.1:8080
 
 - [WireMock Java Library](https://github.com/tomakehurst/wiremock)
 - [Official WireMock Docker Image](https://github.com/wiremock/wiremock-docker)
-- [WireMock extended with Web UI](https://github.com/holomekc/wiremock), a project by [(@holomekc]https://github.com/holomekc)
+- [WireMock extended with Web UI](https://github.com/holomekc/wiremock), a project by [@holomekc](https://github.com/holomekc)
