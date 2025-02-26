@@ -38,6 +38,8 @@ initContainer:
     tag: 5
     pullPolicy: Always
 
+extraInitContainers: []
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""

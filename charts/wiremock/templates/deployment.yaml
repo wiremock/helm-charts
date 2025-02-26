@@ -84,6 +84,9 @@ spec:
               name: responses-volume
             - mountPath: /home/wiremock/storage/__files
               name: responses-data
+        {{- with .Values.extraInitContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
