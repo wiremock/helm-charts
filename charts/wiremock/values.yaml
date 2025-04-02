@@ -26,6 +26,8 @@ responses: {}
 
 replicaCount: 1
 
+revisionHistoryLimit: 10
+
 image:
   repository: wiremock/wiremock
   # Overrides the image tag whose default is the chart appVersion.
@@ -37,8 +39,25 @@ initContainer:
     repository: bash
     tag: 5
     pullPolicy: Always
+  extraVolumeMounts: {}
 
 extraInitContainers: []
+
+persistence:
+  mappings:
+    enabled: false
+    accessModes: ["ReadWriteOnce"]
+    size: 10Gi
+    # storageClassName: "-"
+  responses:
+    enabled: false
+    accessModes: ["ReadWriteOnce"]
+    size: 10Gi
+    # storageClassName: "-"
+
+extraVolumes: {}
+
+extraVolumeMounts: {}
 
 imagePullSecrets: []
 nameOverride: ""
@@ -129,3 +148,33 @@ tolerations: []
 affinity: {}
 
 scheme: "HTTP"
+
+# extraObjects could be utilized to add dynamic manifests via values
+extraObjects: []
+# Examples:
+# extraObjects:
+# - apiVersion: kubernetes-client.io/v1
+#   kind: ExternalSecret
+#   metadata:
+#     name: wiremock-config-{{ .Release.Name }}
+#   spec:
+#     backendType: gcpSecretsManager
+#     data:
+#     - remoteRef:
+#         key: wiremock-config
+#         property: config.json
+#       secretKey: wiremock-config-gcp
+# Alternatively, you can use strings, which lets you use additional templating features:
+# extraObjects:
+# - |
+#   apiVersion: kubernetes-client.io/v1
+#   kind: ExternalSecret
+#   metadata:
+#     name: wiremock-config-{{ .Release.Name }}
+#   spec:
+#     backendType: gcpSecretsManager
+#     data:
+#     - remoteRef:
+#         key: wiremock-config
+#         property: config.json
+#       secretKey: {{ include "some-other-template" }}

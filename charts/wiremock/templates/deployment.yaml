@@ -8,6 +8,7 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit | default 10 }}
   selector:
     matchLabels:
       {{- include "wiremock.selectorLabels" . | nindent 6 }}
@@ -61,6 +62,9 @@ spec:
               name: mappings-data
             - mountPath: /home/wiremock/storage/__files
               name: responses-data
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
       initContainers:
         - name: copy-mappings
           securityContext:
@@ -84,6 +88,9 @@ spec:
               name: responses-volume
             - mountPath: /home/wiremock/storage/__files
               name: responses-data
+            {{- with .Values.initContainer.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
         {{- with .Values.extraInitContainers }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -101,12 +108,25 @@ spec:
       {{- end }}
       volumes:
         - name: mappings-data
+          {{- if .Values.persistence.mappings.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "wiremock.fullname" . }}-mappings-data
+          {{- else }}
           emptyDir: {}
+          {{- end }}
         - name: responses-data
+          {{- if .Values.persistence.responses.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "wiremock.fullname" . }}-responses-data
+          {{- else }}
           emptyDir: {}
+          {{- end }}
         - name: mappings-volume
           configMap:
             name: {{ include "wiremock.fullname" . }}-mappings-configs
         - name: responses-volume
           configMap:
             name: {{ include "wiremock.fullname" . }}-responses-configs
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
