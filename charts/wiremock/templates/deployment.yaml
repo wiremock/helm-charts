@@ -12,6 +12,10 @@ spec:
   selector:
     matchLabels:
       {{- include "wiremock.selectorLabels" . | nindent 6 }}
+  {{- with .Values.deploymentStrategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       annotations:

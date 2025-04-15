@@ -43,6 +43,9 @@ initContainer:
 
 extraInitContainers: []
 
+deploymentStrategy: {}
+# type: Recreate
+
 persistence:
   mappings:
     enabled: false
