@@ -39,7 +39,13 @@ helm.sh/chart: {{ include "wiremock.chart" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/managed-by: {{ .Release.Service -}}
+{{/*
+Additional labels
+*/}}
+{{- if .Values.labels }}
+{{ toYaml .Values.labels }}
+{{- end }}
 {{- end }}
 
 {{/*
@@ -67,8 +73,17 @@ Pod annotations
 {{- define "wiremock.podAnnotations" -}}
 checksum/configMappings: {{ include (print $.Template.BasePath "/configmap-mappings.yaml") . | sha256sum }}
 checksum/configResponses: {{ include (print $.Template.BasePath "/configmap-responses.yaml") . | sha256sum }}
-{{ if .Values.podAnnotations }}
-{{- toYaml .Values.podAnnotations -}}
+{{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations }}
 {{- end }}
 {{- end }}
 
+{{/*
+Additional Pod Labels
+*/}}
+{{- define "wiremock.podLabels" -}}
+{{ include "wiremock.selectorLabels" . }}
+{{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels }}
+{{- end }}
+{{- end }}

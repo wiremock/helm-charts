@@ -16,7 +16,7 @@ spec:
       annotations:
         {{- include "wiremock.podAnnotations" . | nindent 8 }}
       labels:
-        {{- include "wiremock.selectorLabels" . | nindent 8 }}
+        {{- include "wiremock.podLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
