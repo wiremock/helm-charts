@@ -67,8 +67,8 @@ Pod annotations
 {{- define "wiremock.podAnnotations" -}}
 checksum/configMappings: {{ include (print $.Template.BasePath "/configmap-mappings.yaml") . | sha256sum }}
 checksum/configResponses: {{ include (print $.Template.BasePath "/configmap-responses.yaml") . | sha256sum }}
-{{- if .Values.podAnnotations }}
-{{ .Values.podAnnotations }}
+{{ if .Values.podAnnotations }}
+{{- toYaml .Values.podAnnotations -}}
 {{- end }}
 {{- end }}
 
