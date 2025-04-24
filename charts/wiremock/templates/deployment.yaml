@@ -57,11 +57,19 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+            {{- if .Values.mappingsAsConfigmap }}
             - mountPath: /home/wiremock/storage/mappings
               name: mappings-data
+            {{- end }}
+            {{- if .Values.responsesAsConfigmap }}
             - mountPath: /home/wiremock/storage/__files
               name: responses-data
+            {{- end }}
+            {{- with .Values.extraVolumeMounts }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
       initContainers:
+        {{- if .Values.mappingsAsConfigmap }}
         - name: copy-mappings
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -73,6 +81,8 @@ spec:
               name: mappings-volume
             - mountPath: /home/wiremock/storage/mappings
               name: mappings-data
+        {{- end }}
+        {{- if .Values.responsesAsConfigmap }}
         - name: copy-responses
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -84,6 +94,7 @@ spec:
               name: responses-volume
             - mountPath: /home/wiremock/storage/__files
               name: responses-data
+        {{- end }}
         {{- with .Values.extraInitContainers }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -100,13 +111,20 @@ spec:
         {{- tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
       volumes:
+        {{- if .Values.mappingsAsConfigmap }}
         - name: mappings-data
-          emptyDir: {}
-        - name: responses-data
           emptyDir: {}
         - name: mappings-volume
           configMap:
             name: {{ include "wiremock.fullname" . }}-mappings-configs
+        {{- end }}
+        {{- if .Values.responsesAsConfigmap }}
+        - name: responses-data
+          emptyDir: {}
         - name: responses-volume
           configMap:
             name: {{ include "wiremock.fullname" . }}-responses-configs
+        {{- end }}
+        {{- with .Values.extraVolumes }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}

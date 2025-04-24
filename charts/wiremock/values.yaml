@@ -56,23 +56,23 @@ serviceAccount:
 podAnnotations: {}
 
 podSecurityContext: {}
-  # fsGroupChangePolicy: Always
-  # sysctls: []
-  # supplementalGroups: []
-  # fsGroup: 2000
+#  fsGroupChangePolicy: Always
+#  sysctls: []
+#  supplementalGroups: []
+#  fsGroup: 2000
 
 securityContext: {}
-  # seLinuxOptions: {}
-  # runAsUser: 1000
-  # runAsGroup: 2000
-  # runAsNonRoot: true
-  # privileged: false
-  # readOnlyRootFilesystem: true
-  # allowPrivilegeEscalation: false
-  # capabilities:
-  #   drop: ["ALL"]
-  # seccompProfile:
-  #   type: "RuntimeDefault"
+#  seLinuxOptions: {}
+#  runAsUser: 1000
+#  runAsGroup: 2000
+#  runAsNonRoot: true
+#  privileged: false
+#  readOnlyRootFilesystem: true
+#  allowPrivilegeEscalation: false
+#  capabilities:
+#    drop: ["ALL"]
+#  seccompProfile:
+#    type: "RuntimeDefault"
 
 service:
   type: ClusterIP
@@ -83,8 +83,8 @@ ingress:
   enabled: false
   className: ""
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  #  kubernetes.io/ingress.class: nginx
+  #  kubernetes.io/tls-acme: "true"
   hosts:
     - host: chart-example.local
       paths:
@@ -103,17 +103,27 @@ args:
   - "--local-response-templating"
   - "--root-dir=/home/wiremock/storage"
 
+# Disable this if you mount your own mappings using extraVolumeMounts
+mappingsAsConfigmap: true
+
+# Disable this if you mount your own responses using extraVolumeMounts
+responsesAsConfigmap: true
+
+extraVolumeMounts: []
+
+extraVolumes: []
+
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+#  limits:
+#    cpu: 100m
+#    memory: 128Mi
+#  requests:
+#    cpu: 100m
+#    memory: 128Mi
 
 autoscaling:
   enabled: false
