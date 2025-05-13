@@ -8,7 +8,7 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
-  revisionHistoryLimit: {{ .Values.revisionHistoryLimit | default 10 }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit | int }}
   selector:
     matchLabels:
       {{- include "wiremock.selectorLabels" . | nindent 6 }}
@@ -18,10 +18,12 @@ spec:
   {{- end }}
   template:
     metadata:
+      {{- with (include "wiremock.podAnnotations" .) }}
       annotations:
-        {{- include "wiremock.podAnnotations" . | nindent 8 }}
+        {{- . | nindent 8 }}
+      {{- end }}
       labels:
-        {{- include "wiremock.selectorLabels" . | nindent 8 }}
+        {{- include "wiremock.podLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -62,31 +64,41 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+            {{- if (or .Values.mappingsAsConfigmap .Values.mappingsFromConfigmap .Values.persistence.mappings.enabled) }}
             - mountPath: /home/wiremock/storage/mappings
               name: mappings-data
+            {{- end }}
+            {{- if (or .Values.responsesAsConfigmap .Values.responsesFromConfigmap .Values.persistence.responses.enabled) }}
             - mountPath: /home/wiremock/storage/__files
               name: responses-data
+            {{- end }}
             {{- with .Values.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
       initContainers:
+        {{- if (or .Values.mappingsAsConfigmap .Values.mappingsFromConfigmap) }}
         - name: copy-mappings
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
           imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
-          command: ["bash", "-c", "cp  -rf /data/mappings /home/wiremock/storage/mappings"]
+          command: ["bash", "-c", "cp  -rfv /data/mappings /home/wiremock/storage/mappings"]
           volumeMounts:
             - mountPath: /data/mappings
               name: mappings-volume
             - mountPath: /home/wiremock/storage/mappings
               name: mappings-data
+            {{- with .Values.initContainer.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        {{- end }}
+        {{- if (or .Values.responsesAsConfigmap .Values.responsesFromConfigmap) }}
         - name: copy-responses
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
           imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
-          command: ["bash", "-c", "cp  -rf /data/responses /home/wiremock/storage/__files"]
+          command: ["bash", "-c", "cp  -rfv /data/responses /home/wiremock/storage/__files"]
           volumeMounts:
             - mountPath: /data/responses
               name: responses-volume
@@ -95,6 +107,7 @@ spec:
             {{- with .Values.initContainer.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+        {{- end }}
         {{- with .Values.extraInitContainers }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -111,6 +124,7 @@ spec:
         {{- tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
       volumes:
+        {{- if (or .Values.mappingsAsConfigmap .Values.mappingsFromConfigmap .Values.persistence.mappings.enabled) }}
         - name: mappings-data
           {{- if .Values.persistence.mappings.enabled }}
           persistentVolumeClaim:
@@ -118,6 +132,13 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- end }}
+        {{- if (or .Values.mappingsAsConfigmap .Values.mappingsFromConfigmap) }}
+        - name: mappings-volume
+          configMap:
+            name: {{ include "wiremock.fullname" . }}-mappings-configs
+        {{- end }}
+        {{- if (or .Values.responsesAsConfigmap .Values.responsesFromConfigmap .Values.persistence.responses.enabled) }}
         - name: responses-data
           {{- if .Values.persistence.responses.enabled }}
           persistentVolumeClaim:
@@ -125,12 +146,12 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
-        - name: mappings-volume
-          configMap:
-            name: {{ include "wiremock.fullname" . }}-mappings-configs
+        {{- end }}
+        {{- if (or .Values.responsesAsConfigmap .Values.responsesFromConfigmap) }}
         - name: responses-volume
           configMap:
             name: {{ include "wiremock.fullname" . }}-responses-configs
+        {{- end }}
         {{- with .Values.extraVolumes }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

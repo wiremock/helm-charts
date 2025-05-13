@@ -39,7 +39,13 @@ helm.sh/chart: {{ include "wiremock.chart" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/managed-by: {{ .Release.Service -}}
+{{/*
+Additional labels
+*/}}
+{{- if .Values.labels }}
+{{ toYaml .Values.labels }}
+{{- end }}
 {{- end }}
 
 {{/*
@@ -65,10 +71,23 @@ Create the name of the service account to use
 Pod annotations
 */}}
 {{- define "wiremock.podAnnotations" -}}
+{{- if (or .Values.mappingsAsConfigmap .Values.mappingsFromConfigmap) }}
 checksum/configMappings: {{ include (print $.Template.BasePath "/configmap-mappings.yaml") . | sha256sum }}
+{{- end }}
+{{- if (or .Values.responsesAsConfigmap .Values.responsesFromConfigmap) }}
 checksum/configResponses: {{ include (print $.Template.BasePath "/configmap-responses.yaml") . | sha256sum }}
+{{- end }}
 {{- if .Values.podAnnotations }}
-{{ .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations }}
 {{- end }}
-{{- end }}
+{{- end -}}
 
+{{/*
+Additional Pod Labels
+*/}}
+{{- define "wiremock.podLabels" -}}
+{{ include "wiremock.selectorLabels" . }}
+{{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels }}
+{{- end }}
+{{- end }}

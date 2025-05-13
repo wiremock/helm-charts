@@ -1,3 +1,4 @@
+{{- if (or .Values.responsesAsConfigmap .Values.responsesFromConfigmap) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,3 +15,4 @@ data:
   {{- with .Values.responses }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
+{{- end -}}
