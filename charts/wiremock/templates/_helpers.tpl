@@ -71,16 +71,16 @@ Create the name of the service account to use
 Pod annotations
 */}}
 {{- define "wiremock.podAnnotations" -}}
-{{- if .Values.mappingsAsConfigmap }}
+{{- if (or .Values.mappingsAsConfigmap .Values.mappingsFromConfigmap) }}
 checksum/configMappings: {{ include (print $.Template.BasePath "/configmap-mappings.yaml") . | sha256sum }}
 {{- end }}
-{{- if .Values.responsesAsConfigmap }}
+{{- if (or .Values.responsesAsConfigmap .Values.responsesFromConfigmap) }}
 checksum/configResponses: {{ include (print $.Template.BasePath "/configmap-responses.yaml") . | sha256sum }}
 {{- end }}
 {{- if .Values.podAnnotations }}
 {{ toYaml .Values.podAnnotations }}
 {{- end }}
-{{- end }}
+{{- end -}}
 
 {{/*
 Additional Pod Labels

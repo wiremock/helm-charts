@@ -1,4 +1,4 @@
-{{- if .Values.mappingsAsConfigmap -}}
+{{- if (or .Values.mappingsAsConfigmap .Values.mappingsFromConfigmap) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
