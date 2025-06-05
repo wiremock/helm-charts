@@ -10,6 +10,9 @@ spec:
     - port: {{ .Values.service.externalPort }}
       targetPort: {{ .Values.service.internalPort }}
       protocol: TCP
+      {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort))) }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
       name: {{ include "wiremock.fullname" . }}
   selector:
     {{- include "wiremock.selectorLabels" . | nindent 4 }}
