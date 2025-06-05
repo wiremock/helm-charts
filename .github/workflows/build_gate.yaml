@@ -1,0 +1,25 @@
+name: Build Gate
+on:  
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  id-token: write
+  contents: write
+  actions: write
+  checks: write
+
+env:
+  IS_MAIN: ${{ github.ref_name == 'main' && 1 || 0 }}
+
+jobs:
+  build_pack_publish:
+    name: Build Clip-Lib Helm Chart
+    uses: TCGplayer/clip-github-actions/.github/workflows/helm_build_gate.yaml@main
+    secrets: inherit
+    with:
+      chart-path: "./charts/wiremock"
