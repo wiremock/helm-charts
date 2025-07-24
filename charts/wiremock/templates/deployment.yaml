@@ -82,7 +82,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
           imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
-          command: ["bash", "-c", "cp  -rfv /data/mappings /home/wiremock/storage/mappings"]
+          command: ["bash", "-c", "cp  -rfv /data/mappings/* /home/wiremock/storage/mappings"]
           volumeMounts:
             - mountPath: /data/mappings
               name: mappings-volume
@@ -98,7 +98,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
           imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
-          command: ["bash", "-c", "cp  -rfv /data/responses /home/wiremock/storage/__files"]
+          command: ["bash", "-c", "cp  -rfv /data/responses/* /home/wiremock/storage/__files"]
           volumeMounts:
             - mountPath: /data/responses
               name: responses-volume
