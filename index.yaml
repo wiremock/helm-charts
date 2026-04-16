@@ -3,6 +3,34 @@ entries:
   wiremock:
   - apiVersion: v2
     appVersion: 3.10.0
+    created: "2026-04-16T10:41:03.011218969Z"
+    description: A Helm chart for WireMock deployment on Kubernetes
+    digest: e8ff02fcada8aa01f9cfeeb0307aebd511e581918dea824caae23ab9841e34f9
+    home: https://wiremock.org
+    icon: https://wiremock.org/images/logos/wiremock/logo_square.svg
+    keywords:
+    - wiremock
+    - api
+    - openapi
+    - api-testing
+    - rest-api
+    - api-mocking
+    maintainers:
+    - name: gitkent
+      url: https://github.com/gitkent
+    - name: oleg-nenashev
+      url: https://github.com/oleg-nenashev
+    name: wiremock
+    sources:
+    - https://github.com/wiremock/helm-charts
+    - https://github.com/wiremock/wiremock-docker
+    - https://github.com/wiremock/wiremock
+    type: application
+    urls:
+    - https://github.com/wiremock/helm-charts/releases/download/wiremock-1.11.0/wiremock-1.11.0.tgz
+    version: 1.11.0
+  - apiVersion: v2
+    appVersion: 3.10.0
     created: "2026-03-22T08:46:46.215899889Z"
     description: A Helm chart for WireMock deployment on Kubernetes
     digest: 4d05b09291ee91fc3fffec6d7c5683b581b7a0e2a3233125f9ba18245718bbd2
@@ -419,4 +447,4 @@ entries:
     urls:
     - https://github.com/wiremock/helm-charts/releases/download/wiremock-0.1.4/wiremock-0.1.4.tgz
     version: 0.1.4
-generated: "2026-03-22T08:46:46.216020765Z"
+generated: "2026-04-16T10:41:03.011333933Z"
