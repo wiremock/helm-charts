@@ -123,6 +123,8 @@ service:
   type: ClusterIP
   externalPort: 9021
   internalPort: 9021
+  annotations: {}
+    # alb.ingress.kubernetes.io/healthcheck-path: /__admin/health
 
 ingress:
   enabled: false
