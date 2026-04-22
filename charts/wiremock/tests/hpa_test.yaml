@@ -1,0 +1,18 @@
+suite: hpa
+templates:
+  - hpa.yaml
+
+tests:
+  - it: no document when autoscaling disabled
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders with autoscaling enabled
+    set:
+      autoscaling.enabled: true
+    asserts:
+      - isKind:
+          of: HorizontalPodAutoscaler
+      - matchSnapshot:
+          path: spec

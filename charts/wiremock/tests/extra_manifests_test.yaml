@@ -1,0 +1,23 @@
+suite: extra manifests
+templates:
+  - extra-manifests.yaml
+
+tests:
+  - it: no document when extraObjects is empty
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders object from extraObjects
+    set:
+      extraObjects:
+        - apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: extra-config
+          data:
+            key: value
+    asserts:
+      - hasDocuments:
+          count: 1
+      - matchSnapshot: {}

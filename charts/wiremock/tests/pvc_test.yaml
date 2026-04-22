@@ -1,0 +1,37 @@
+suite: persistent volume claims
+templates:
+  - persistentvolumeclaim-mappings.yaml
+  - persistentvolumeclaim-responses.yaml
+
+tests:
+  - it: no mappings PVC when persistence disabled
+    template: persistentvolumeclaim-mappings.yaml
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: mappings PVC renders when enabled
+    template: persistentvolumeclaim-mappings.yaml
+    set:
+      persistence.mappings.enabled: true
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+      - matchSnapshot:
+          path: spec
+
+  - it: no responses PVC when persistence disabled
+    template: persistentvolumeclaim-responses.yaml
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: responses PVC renders when enabled
+    template: persistentvolumeclaim-responses.yaml
+    set:
+      persistence.responses.enabled: true
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+      - matchSnapshot:
+          path: spec

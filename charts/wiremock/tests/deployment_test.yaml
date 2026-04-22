@@ -1,0 +1,27 @@
+suite: deployment
+templates:
+  - deployment.yaml
+  - configmap-mappings.yaml
+  - configmap-responses.yaml
+
+tests:
+  - it: renders with default values
+    template: deployment.yaml
+    asserts:
+      - isKind:
+          of: Deployment
+      - matchSnapshot:
+          path: spec
+
+  - it: renders automount secret disabled
+    template: deployment.yaml
+    set:
+      automountServiceAccountToken: false
+    asserts:
+      - isKind:
+          of: Deployment
+      - matchSnapshot:
+          path: spec
+      - equal:
+          path: spec.template.spec.automountServiceAccountToken
+          value: false

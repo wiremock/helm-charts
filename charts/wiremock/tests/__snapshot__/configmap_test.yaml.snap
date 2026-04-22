@@ -1,0 +1,23 @@
+mappings mappings ConfigMap renders with default values:
+  1: |
+    mapping_1.json: |-
+      {
+        "request": {
+            "method": "POST",
+            "url": "/v1/hello"
+        },
+        "response":{
+          "status":200,
+          "bodyFileName":"responses/response_1.json",
+          "headers":{
+             "Content-Type":"application/json"
+          }
+       }
+      }
+responses responses ConfigMap renders with default values:
+  1: |
+    response_1.json: |
+      {
+        "Id": "001",
+        "message": "hello"
+      }

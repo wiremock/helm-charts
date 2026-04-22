@@ -1,0 +1,11 @@
+renders with default values:
+  1: |
+    ports:
+      - name: RELEASE-NAME-wiremock
+        port: 9021
+        protocol: TCP
+        targetPort: 9021
+    selector:
+      app.kubernetes.io/instance: RELEASE-NAME
+      app.kubernetes.io/name: wiremock
+    type: ClusterIP

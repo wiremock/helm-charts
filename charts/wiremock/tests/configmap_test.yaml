@@ -1,0 +1,37 @@
+suite: configmaps
+templates:
+  - configmap-mappings.yaml
+  - configmap-responses.yaml
+
+tests:
+  - it: mappings mappings ConfigMap renders with default values
+    template: configmap-mappings.yaml
+    asserts:
+      - isKind:
+          of: ConfigMap
+      - matchSnapshot:
+          path: data
+
+  - it: no mappings mappings ConfigMap when disabled
+    template: configmap-mappings.yaml
+    set:
+      mappingsFromConfigmap: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: responses responses ConfigMap renders with default values
+    template: configmap-responses.yaml
+    asserts:
+      - isKind:
+          of: ConfigMap
+      - matchSnapshot:
+          path: data
+
+  - it: no responses responses ConfigMap when disabled
+    template: configmap-responses.yaml
+    set:
+      responsesFromConfigmap: false
+    asserts:
+      - hasDocuments:
+          count: 0

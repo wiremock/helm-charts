@@ -1,0 +1,14 @@
+mappings PVC renders when enabled:
+  1: |
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+responses PVC renders when enabled:
+  1: |
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi

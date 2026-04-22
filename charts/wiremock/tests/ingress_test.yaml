@@ -1,0 +1,18 @@
+suite: ingress
+templates:
+  - ingress.yaml
+
+tests:
+  - it: no document rendered when disabled
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders with ingress enabled
+    set:
+      ingress.enabled: true
+    asserts:
+      - isKind:
+          of: Ingress
+      - matchSnapshot:
+          path: spec

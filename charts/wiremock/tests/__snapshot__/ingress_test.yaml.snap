@@ -1,0 +1,13 @@
+renders with ingress enabled:
+  1: |
+    rules:
+      - host: chart-example.local
+        http:
+          paths:
+            - backend:
+                service:
+                  name: RELEASE-NAME-wiremock
+                  port:
+                    number: 9021
+              path: /
+              pathType: ImplementationSpecific

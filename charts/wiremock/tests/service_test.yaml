@@ -1,0 +1,11 @@
+suite: service
+templates:
+  - service.yaml
+
+tests:
+  - it: renders with default values
+    asserts:
+      - isKind:
+          of: Service
+      - matchSnapshot:
+          path: spec

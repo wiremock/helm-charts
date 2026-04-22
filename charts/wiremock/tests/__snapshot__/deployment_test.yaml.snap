@@ -1,0 +1,178 @@
+renders automount secret disabled:
+  1: |
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/name: wiremock
+    template:
+      metadata:
+        annotations:
+          checksum/configMappings: 6b2aa42c229808070f4207b2bf028965eeba5f00f42f1fd50906a19102c0acb4
+          checksum/configResponses: a69ee684790ce00a5aa324612f831a5dccc6fde96056a36a1cf056eb5966491b
+        labels:
+          app.kubernetes.io/instance: RELEASE-NAME
+          app.kubernetes.io/name: wiremock
+      spec:
+        automountServiceAccountToken: false
+        containers:
+          - args:
+              - --port=9021
+              - --max-request-journal=1000
+              - --local-response-templating
+              - --root-dir=/home/wiremock/storage
+            image: wiremock/wiremock:3.10.0
+            imagePullPolicy: IfNotPresent
+            livenessProbe:
+              httpGet:
+                path: /__admin/health
+                port: 9021
+                scheme: HTTP
+            name: wiremock
+            ports:
+              - containerPort: 9021
+                protocol: TCP
+            readinessProbe:
+              httpGet:
+                path: /__admin/health
+                port: 9021
+                scheme: HTTP
+            resources: {}
+            securityContext: {}
+            volumeMounts:
+              - mountPath: /home/wiremock/storage/mappings
+                name: mappings-data
+              - mountPath: /home/wiremock/storage/__files
+                name: responses-data
+        initContainers:
+          - command:
+              - bash
+              - -c
+              - find /data/mappings  -type f -name "*.json" -exec cp {} /home/wiremock/storage/mappings/ \;
+            image: bash:5
+            imagePullPolicy: Always
+            name: copy-mappings
+            resources: {}
+            securityContext: {}
+            volumeMounts:
+              - mountPath: /data/mappings
+                name: mappings-volume
+              - mountPath: /home/wiremock/storage/mappings
+                name: mappings-data
+          - command:
+              - bash
+              - -c
+              - find /data/responses -type f -name "*.json" -exec cp {} /home/wiremock/storage/__files/ \;
+            image: bash:5
+            imagePullPolicy: Always
+            name: copy-responses
+            resources: {}
+            securityContext: {}
+            volumeMounts:
+              - mountPath: /data/responses
+                name: responses-volume
+              - mountPath: /home/wiremock/storage/__files
+                name: responses-data
+        securityContext: {}
+        serviceAccountName: RELEASE-NAME-wiremock
+        volumes:
+          - emptyDir: {}
+            name: mappings-data
+          - configMap:
+              name: RELEASE-NAME-wiremock-mappings-configs
+            name: mappings-volume
+          - emptyDir: {}
+            name: responses-data
+          - configMap:
+              name: RELEASE-NAME-wiremock-responses-configs
+            name: responses-volume
+renders with default values:
+  1: |
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/name: wiremock
+    template:
+      metadata:
+        annotations:
+          checksum/configMappings: 6b2aa42c229808070f4207b2bf028965eeba5f00f42f1fd50906a19102c0acb4
+          checksum/configResponses: a69ee684790ce00a5aa324612f831a5dccc6fde96056a36a1cf056eb5966491b
+        labels:
+          app.kubernetes.io/instance: RELEASE-NAME
+          app.kubernetes.io/name: wiremock
+      spec:
+        automountServiceAccountToken: true
+        containers:
+          - args:
+              - --port=9021
+              - --max-request-journal=1000
+              - --local-response-templating
+              - --root-dir=/home/wiremock/storage
+            image: wiremock/wiremock:3.10.0
+            imagePullPolicy: IfNotPresent
+            livenessProbe:
+              httpGet:
+                path: /__admin/health
+                port: 9021
+                scheme: HTTP
+            name: wiremock
+            ports:
+              - containerPort: 9021
+                protocol: TCP
+            readinessProbe:
+              httpGet:
+                path: /__admin/health
+                port: 9021
+                scheme: HTTP
+            resources: {}
+            securityContext: {}
+            volumeMounts:
+              - mountPath: /home/wiremock/storage/mappings
+                name: mappings-data
+              - mountPath: /home/wiremock/storage/__files
+                name: responses-data
+        initContainers:
+          - command:
+              - bash
+              - -c
+              - find /data/mappings  -type f -name "*.json" -exec cp {} /home/wiremock/storage/mappings/ \;
+            image: bash:5
+            imagePullPolicy: Always
+            name: copy-mappings
+            resources: {}
+            securityContext: {}
+            volumeMounts:
+              - mountPath: /data/mappings
+                name: mappings-volume
+              - mountPath: /home/wiremock/storage/mappings
+                name: mappings-data
+          - command:
+              - bash
+              - -c
+              - find /data/responses -type f -name "*.json" -exec cp {} /home/wiremock/storage/__files/ \;
+            image: bash:5
+            imagePullPolicy: Always
+            name: copy-responses
+            resources: {}
+            securityContext: {}
+            volumeMounts:
+              - mountPath: /data/responses
+                name: responses-volume
+              - mountPath: /home/wiremock/storage/__files
+                name: responses-data
+        securityContext: {}
+        serviceAccountName: RELEASE-NAME-wiremock
+        volumes:
+          - emptyDir: {}
+            name: mappings-data
+          - configMap:
+              name: RELEASE-NAME-wiremock-mappings-configs
+            name: mappings-volume
+          - emptyDir: {}
+            name: responses-data
+          - configMap:
+              name: RELEASE-NAME-wiremock-responses-configs
+            name: responses-volume

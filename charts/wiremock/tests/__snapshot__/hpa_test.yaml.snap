@@ -1,0 +1,15 @@
+renders with autoscaling enabled:
+  1: |
+    maxReplicas: 100
+    metrics:
+      - resource:
+          name: cpu
+          target:
+            averageUtilization: 80
+            type: Utilization
+        type: Resource
+    minReplicas: 1
+    scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: RELEASE-NAME-wiremock
